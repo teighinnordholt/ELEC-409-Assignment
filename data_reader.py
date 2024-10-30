@@ -24,7 +24,7 @@ def read_data(path : str):
 
     return df_T.to_numpy()[2:] #removing headers
 
-def add_outcome(data_raw):
+def add_outcome(data_raw : list):
 
     """
     Adds outcome to the raw data array
@@ -56,7 +56,7 @@ def add_outcome(data_raw):
 
     return new_data
 
-def prep_data(data_raw : list, randomize : bool = False):
+def sep_data(data_raw : list, randomize : bool = False):
 
     """
     Seperates raw data into training and testing datasets
@@ -115,7 +115,7 @@ def create_datasets(path, rand=False):
 
     data_w_outcome = add_outcome(data)
 
-    return prep_data(data_w_outcome, randomize=rand)
+    return sep_data(data_w_outcome, randomize=rand)
 
 if __name__ == '__main__':
 
@@ -125,4 +125,4 @@ if __name__ == '__main__':
 
     data = add_outcome(data)
 
-    training, testing = prep_data(data)
+    training, testing = sep_data(data)
