@@ -109,13 +109,13 @@ def prep_data(data_raw : list, randomize : bool = False):
 
         return train_data, test_data
     
-def create_datasets(path):
+def create_datasets(path, rand=False):
 
     data = read_data(path)
 
     data_w_outcome = add_outcome(data)
 
-    return prep_data(data_w_outcome)
+    return prep_data(data_w_outcome, randomize=rand)
 
 if __name__ == '__main__':
 
