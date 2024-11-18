@@ -24,6 +24,39 @@ def read_data(path : str):
 
     return df_T.to_numpy()[2:] #removing headers
 
+def normalize_data(data: np.ndarray):
+
+    """
+    Normalizes the data by taking the natural log
+    For positive values, uses ln(x)
+    For negative values, uses -ln(-x)
+
+    Parameters
+    ----------
+    data : np.ndarray
+        Array containing the gene expression data
+
+    Returns
+    -------
+    normalized_data : np.ndarray
+        The normalized gene expression data
+
+    """
+
+    normalized_data = np.zeros_like(data)
+    
+    for i in range(data.shape[0]):
+        for j in range(data.shape[1]):
+            val = data[i, j]
+            if val > 0:
+                normalized_data[i, j] = np.log10(val)
+            elif val < 0:
+                normalized_data[i, j] = -np.log10(-val)
+            else:
+                normalized_data[i, j] = 0
+    
+    return normalized_data
+
 def add_outcome(data_raw : list):
 
     """
@@ -112,7 +145,7 @@ def sep_data(data_raw : list, randomize : bool = False):
 def create_datasets(path, rand=False):
 
     data = read_data(path)
-
+    data = normalize_data(data)
     data_w_outcome = add_outcome(data)
 
     return sep_data(data_w_outcome, randomize=rand)
