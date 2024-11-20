@@ -109,35 +109,30 @@ def sep_data(data_raw : list, randomize : bool = False):
 
     """
 
-    #randomly seperating data
+    dead_indices = list(range(0, 21))
+    alive_indices = list(range(21, 60))
+
+    #mixing up patients
     if randomize:
-        #break participants into training and testing set randomly
-        train_indices_dead = random.sample(range(0, 21), 11) #size of 11
-        train_indices_dead.sort()
+        random.shuffle(dead_indices)
+        random.shuffle(alive_indices)
 
-        test_indices_dead = [x for x in range(0, 21) if x not in train_indices_dead] #size of 10
+    #taking indices of first n dead/alive for training
+    train_indices_dead = dead_indices[:11]
+    train_indices_alive = alive_indices[:18]
 
-        train_indices_alive = random.sample(range(21, 60), 20) #size of 20
-        train_indices_alive.sort()
+    #remaining go to the test set
+    test_indices_dead = dead_indices[11:]
+    test_indices_alive = alive_indices[19:]
 
-        test_indices_alive = [x for x in range(21, 60) if x not in train_indices_alive] #size of 19
+    #combine indices
+    test_indices = test_indices_dead + test_indices_alive
+    train_indices = train_indices_dead + train_indices_alive
 
-        #compiling datasets
-        train_data = np.array([data_raw[i] for i in train_indices_dead + train_indices_alive])
-        test_data = np.array([data_raw[i] for i in test_indices_dead + test_indices_alive])
+    train_data = np.array([data_raw[i] for i in train_indices])
+    test_data = np.array([data_raw[i] for i in test_indices])
 
-        return train_data, test_data
-
-    else:
-        #splitting in half        
-        train_indices = np.append(np.arange(0,11), np.arange(21,41))
-        test_indices = np.append(np.arange(11, 21), np.arange(41,60))
-
-        #compiling datasets
-        train_data = np.array([data_raw[i] for i in train_indices])
-        test_data = np.array([data_raw[i] for i in test_indices])
-
-        return train_data, test_data
+    return train_data, test_data
     
 def create_datasets(path, rand=False):
 
