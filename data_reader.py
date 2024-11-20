@@ -27,9 +27,7 @@ def read_data(path : str):
 def normalize_data(data: np.ndarray):
 
     """
-    Normalizes the data by taking the natural log
-    For positive values, uses ln(x)
-    For negative values, uses -ln(-x)
+    Normalizes the data by gene so the mean is 0 and the std is 1
 
     Parameters
     ----------
@@ -43,19 +41,18 @@ def normalize_data(data: np.ndarray):
 
     """
 
-    normalized_data = np.zeros_like(data)
-    
-    for i in range(data.shape[0]):
-        for j in range(data.shape[1]):
-            val = data[i, j]
-            if val > 0:
-                normalized_data[i, j] = np.log10(val)
-            elif val < 0:
-                normalized_data[i, j] = -np.log10(-val)
-            else:
-                normalized_data[i, j] = 0
-    
-    return normalized_data
+    #transposing so we index the genes
+    data_t = data.T
+    normalized_data_t = np.zeros_like(data_t)
+
+    for i in range(data_t.shape[0]):
+        
+        mean = np.mean(data_t[i])
+        std = np.std(data_t[i])
+
+        normalized_data_t[i] = (data_t[i] - mean) / std
+
+    return normalized_data_t.T
 
 def add_outcome(data_raw : list):
 
