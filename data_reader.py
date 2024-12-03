@@ -118,12 +118,20 @@ def sep_data(data_raw : list, randomize : bool = False):
         random.shuffle(alive_indices)
 
     #taking indices of first n dead/alive for training
-    train_indices_dead = dead_indices[:11]
-    train_indices_alive = alive_indices[:18]
+    dead_cut = 11
+    alive_cut = 30-dead_cut
+    train_indices_dead = dead_indices[:dead_cut]
+    train_indices_alive = alive_indices[:alive_cut]
 
     #remaining go to the test set
-    test_indices_dead = dead_indices[11:]
-    test_indices_alive = alive_indices[19:]
+    test_indices_dead = dead_indices[dead_cut:]
+    test_indices_alive = alive_indices[alive_cut:]
+
+    if 0:
+        print(len(train_indices_alive))
+        print(len(train_indices_dead))
+        print(len(test_indices_alive))
+        print(len(test_indices_dead))
 
     #combine indices
     test_indices = test_indices_dead + test_indices_alive
